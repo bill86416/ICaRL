@@ -19,11 +19,12 @@ parser = argparse.ArgumentParser(description='PyTorch Seen Testing Category Trai
 parser.add_argument('--dataset', default='mnist', help='[mnist, notmnist, fashionmnist]')
 parser.add_argument('--net', default='resnet18', help='resnet18')
 parser.add_argument('--trial', default='1')
+parser.add_argument('--gpu_num', type=int , default=0, help='gpu_num (default: 0)')
 parser.add_argument('--num_classes', type=int)
 parser.add_argument('--debug', default=False, action='store_true')
 
 args = parser.parse_args()
-
+torch.cuda.set_device(args.gpu_num)
 
 start_time = time.time() 
 
