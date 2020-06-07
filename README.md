@@ -1,2 +1,1 @@
-# ICaRL
-Implementation of ICaRL on Mnist
+# A PyTorch Implementation of iCaRL
