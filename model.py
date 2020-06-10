@@ -7,19 +7,25 @@ import numpy as np
 from PIL import Image
 
 from resnet import resnet18
-
+from lenet import lenet
 # Hyper Parameters
 num_epochs = 50
 batch_size = 100
 learning_rate = 0.002
 
 class iCaRLNet(nn.Module):
-    def __init__(self, feature_size, n_classes):
+    def __init__(self, net_type ,feature_size, n_classes):
         # Network architecture
         super(iCaRLNet, self).__init__()
-        self.feature_extractor = resnet18()
-        self.feature_extractor.fc =\
-            nn.Linear(self.feature_extractor.fc.in_features, feature_size)
+        if net_type == "resnet18":
+            self.feature_extractor = resnet18()
+            self.feature_extractor.fc =\
+                nn.Linear(self.feature_extractor.fc.in_features, feature_size)
+        elif net_type == "lenet":
+            self.feature_extractor = resnet18()
+            self.feature_extractor.fc =\
+                nn.Linear(self.feature_extractor.fc.in_features, feature_size)
+ 
         self.bn = nn.BatchNorm1d(feature_size, momentum=0.01)
         self.ReLU = nn.ReLU()
         self.fc = nn.Linear(feature_size, n_classes, bias=False)
@@ -79,14 +85,14 @@ class iCaRLNet(nn.Module):
                 # Extract feature for each exemplar in P_y
                 for ex in P_y:
                     ex = Variable(transform(Image.fromarray(ex)), volatile=True).cuda()
-                    feature = self.feature_extractor(ex.unsqueeze(0))
+                    feature = self.feature_extractor(ex.unsqueeze(0)).data.cpu()
                     feature = feature.squeeze()
                     feature.data = feature.data / feature.data.norm() # Normalize
-                    features.append(feature)
-                features = torch.stack(features)
+                    features.append(feature.data.cpu())
+                features = torch.stack(features).cpu()
                 mu_y = features.mean(0).squeeze()
                 mu_y.data = mu_y.data / mu_y.data.norm() # Normalize
-                exemplar_means.append(mu_y)
+                exemplar_means.append(mu_y.cuda())
             self.exemplar_means = exemplar_means
             self.compute_means = False
             print ("Done")
