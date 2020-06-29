@@ -1,5 +1,5 @@
-# A PyTorch Implementation of  iCaRL: Incremental Classifier and Representation Learning on Mninst, FashionMnist and Kmnist datasets
-Code modified from https://github.com/donlee90/icarl
+# A PyTorch Implementation of  iCaRL
+This is an unofficial implementation of iCaRL: Incremental Classifier and Representation Learning on Mninst, FashionMnist and Kmnist datasets. This code is  modified from https://github.com/donlee90/icarl.
 
 
 # Usage
